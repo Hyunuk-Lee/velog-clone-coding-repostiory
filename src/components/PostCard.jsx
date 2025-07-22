@@ -1,27 +1,49 @@
 import styled from "styled-components";
 import { FiHeart } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 function PostCard({ post }) {
-  const { title, content, thumbnail, createdAt } = post;
+  const {
+    id,
+    title,
+    content,
+    thumbnailUrl,
+    createdAt,
+    commentCount,
+    writerName,
+    writerProfileUrl,
+    heartCount,
+  } = post;
+
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/boards/${id}`);
+  };
+
+  const formattedDate = new Date(createdAt).toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   return (
-    <Card>
-      <Thumbnail src={thumbnail} alt="post thumbnail" />
+    <Card onClick={handleClick}>
+      <Thumbnail src={thumbnailUrl} alt="post thumbnail" />
       <PostBody>
         <Title>{title}</Title>
         <Preview>{content}</Preview>
         <Meta>
-          <date>2025년 7월 7일·4개의 댓글</date>
+          {formattedDate} · {commentCount}개의 댓글
         </Meta>
       </PostBody>
       <PostFooter>
         <WriterInfo>
-          <Avatar src="user-profile-img.png" />
-          <Username>by <b>사용자</b></Username>
+          <Avatar src={writerProfileUrl} alt="profile" />
+          <Username>by <b>{writerName}</b></Username>
         </WriterInfo>
         <Like>
           <FiHeart />
-          <span>0</span>
+          <span>{heartCount}</span>
         </Like>
       </PostFooter>
     </Card>

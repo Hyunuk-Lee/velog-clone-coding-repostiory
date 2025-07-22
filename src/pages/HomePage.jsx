@@ -1,13 +1,29 @@
-import styled from "styled-components";
-import { dummyData } from "../data/dummy_data";
-import Header from "../components/Header";
+import { useEffect, useState } from "react";
+import axios from "../api/axiosInstance";
 import PostList from "../components/PostList";
+import Header from "../components/Header";
+import styled from "styled-components";
 
 function HomePage() {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const res = await axios.get("/boards");
+        console.log("posts:", res.data);
+        setPosts(res.data);
+      } catch (err) {
+        console.error("게시글 불러오기 실패:", err);
+      }
+    }
+    fetchPosts();
+  }, []);
+
   return (
     <Container>
       <Header />
-      <PostList posts={dummyData} />
+      <PostList posts={posts} />
     </Container>
   );
 }
