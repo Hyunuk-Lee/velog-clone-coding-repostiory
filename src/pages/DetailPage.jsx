@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "../api/axiosInstance";
 import styled from "styled-components";
 import { FiHeart } from "react-icons/fi";
+import { FiShare2 } from "react-icons/fi";
 import Header2 from "../components/Header2";
 
 function DetailPage() {
@@ -33,25 +34,43 @@ function DetailPage() {
   return (
     <Container>
       <Header2 />
-      <Container2>
-        <Title>{post.title}</Title>
-        <WriterInfo>
-          <NameDate>
-            <Name>{post.writerName}</Name>
-            <DateText> · {formattedDate}</DateText>
-          </NameDate>
-        
-          <RightSide>
-            <FollowButton>팔로우</FollowButton>
-            <LikeCount>
-              <FiHeart />
-              <span>{post.heartCount}</span>
-            </LikeCount>
-          </RightSide>
-        </WriterInfo>
-        <Thumbnail src={post.thumbnailUrl} alt="thumbnail" />
-        <Content>{post.content}</Content>
-      </Container2>
+      <DetailLayout>
+        <SideButtons>
+          <CircleButton>
+            <FiHeart size={20} />
+          </CircleButton>
+          <LikeNumber>{post.heartCount}</LikeNumber>
+          <CircleButton>
+            <ShareIcon>
+              <FiShare2 size={20} />
+            </ShareIcon>
+          </CircleButton>
+        </SideButtons>
+
+        <ContentArea>
+          <Title>{post.title}</Title>
+
+          <WriterInfo>
+            <NameDate>
+              <Name>{post.writerName}</Name>
+              <DateText> · {formattedDate}</DateText>
+            </NameDate>
+            <RightSide>
+              <FollowButton>팔로우</FollowButton>
+            </RightSide>
+          </WriterInfo>
+
+          <TagList>
+            <Tag>API 디자인</Tag>
+            <Tag>API개발</Tag>
+            <Tag>DevTools</Tag>
+            <Tag>개발도구</Tag>
+          </TagList>
+
+          <Thumbnail src={post.thumbnailUrl} alt="thumbnail" />
+          <Content>{post.content}</Content>
+        </ContentArea>
+      </DetailLayout>
     </Container>
   );
 }
@@ -63,9 +82,62 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
-const Container2 = styled.div`
-  max-width: 720px;
+const DetailLayout = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1024px;
   margin: 0 auto;
+`;
+
+const SideButtons = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 0.75rem;
+  border-radius: 36px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  position: absolute;
+  top: 330px;
+  left: 200px;
+  width: 50px;
+  @media (max-width: 1250px) {
+    display: none;
+  }
+`;
+
+const CircleButton = styled.button`
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #dee2e6;
+  background-color: ${({ active }) => (active ? "#495057" : "white")};
+  color: ${({ active }) => (active ? "white" : "#495057")};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 0.3rem;
+
+  &:hover {
+    background-color: ${({ active }) => (active ? "#343a40" : "#f1f3f5")};
+  }
+`;
+
+const LikeNumber = styled.div`
+  font-size: 1rem;
+  font-weight: bold;
+  color: #495057;
+  margin-bottom: 1rem;
+`;
+
+const ShareIcon = styled.span`
+  font-size: 1rem;
+`;
+
+const ContentArea = styled.div`
+  max-width: 720px;
 `;
 
 const Title = styled.h1`
@@ -73,12 +145,11 @@ const Title = styled.h1`
   font-weight: bold;
   margin-bottom: 1.8rem;
   text-align: center;
-
 `;
 
 const WriterInfo = styled.div`
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
 `;
@@ -115,23 +186,26 @@ const FollowButton = styled.button`
   border: 2px solid #20c997;
   border-radius: 20px;
   cursor: pointer;
-  
+
   &:hover {
     background-color: #e6fcf5;
   }
 `;
 
-const LikeCount = styled.div`
+const TagList = styled.div`
   display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.25rem 0.9rem;
-  font-size: 0.9rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+`;
+
+const Tag = styled.span`
+  font-size: 0.85rem;
+  background-color: #f1f3f5;
+  color: #20c997;
   font-weight: 500;
-  color: #495057;
-  border: 2px solid #ced4da;
+  padding: 0.35rem 0.8rem;
   border-radius: 20px;
-  background-color: white;
 `;
 
 const Thumbnail = styled.img`
@@ -144,5 +218,5 @@ const Content = styled.p`
   font-size: 1.1rem;
   line-height: 1.75;
   color: #343a40;
-  white-space: pre-wrap; /* 줄바꿈 유지 */
+  white-space: pre-wrap;
 `;

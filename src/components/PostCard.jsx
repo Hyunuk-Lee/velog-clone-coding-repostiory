@@ -62,6 +62,7 @@ const Card = styled.div`
   max-width: 350px;
   border: 1px solid #dee2e6;
   height: 100%; 
+  cursor: pointer;
 `;
 
 const Thumbnail = styled.img`
